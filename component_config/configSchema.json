@@ -1,103 +1,47 @@
 {
   "type": "object",
-  "title": "extractor configuration",
+  "title": "Parameters",
   "required": [
-    "project_id",
-    "#api_token",
-    "period_from",
-    "period_to",
-    "relative_period",
-    "metrics",
-    "backfill_mode"
+    "resource_url",
+    "api_version",
+    "endpoint",
+    "query",
+    "incremental"
   ],
   "properties": {
-    "project_id": {
+    "resource_url": {
       "type": "string",
-      "title": "Project ID",
+      "title": "Resource URL",
+      "description": "URL to the CRM system located in the Dynamics 365 cloud. Usually in format <a href='https://<organization>.crm.dynamics.com'>https://&ltorganization&gt.crm.dynamics.com</a>.",
       "propertyOrder": 100
     },
-    "#api_token": {
+    "api_version": {
       "type": "string",
-      "title": "API token",
-      "format": "password",
-      "propertyOrder": 200
+      "title": "API Version",
+      "propertyOrder": 200,
+      "description": "The API version, which will be used to query the data. For a list of available versions, please, refer to <a href='https://docs.microsoft.com/en-us/dynamics365/customerengagement/on-premises/developer/webapi/web-api-versions'>Microsoft's Web API documentation</a>."
     },
-    "period_from": {
+    "endpoint": {
       "type": "string",
-      "format": "date",
-      "title": "Period from date [including]",
-      "propertyOrder": 300
+      "title": "Endpoint",
+      "propertyOrder": 300,
+      "description": "The entity, which will be queried agains. For a list of available entities, please, refer to <a href='https://docs.microsoft.com/en-us/previous-versions/dynamicscrm-2016/developers-guide/mt608066(v=crm.8)'>entity documentation</a>."
     },
-    "period_to": {
+    "query": {
       "type": "string",
-      "format": "date",
-      "title": "Period to date [excluding]",
-      "propertyOrder": 400
-    },
-    "relative_period": {
-      "type": "string",
-      "title": "Relative period from now (utc)",
-      "description": "Relative period in format: '5 hours ago', 'yesterday','3 days ago', '4 months ago', '2 years ago', 'today'. Overrides `from` and `to` parameters.",
-      "propertyOrder": 450
-    },
-    "backfill_mode": {
-      "type": "number",
-      "title": "Backfill mode",
-      "description": "If backfill mode is enabled, each consecutive run of the component will continue from the end of the last run period, until current date is reached. The From and To date parameters are used to define Start date of the back-fill and also relative window of each run.",
-      "propertyOrder": 455,
-      "enum": [
-        0,
-        1
-      ],
-      "default": 0,
+      "title": "Query (advanced)",
+      "propertyOrder": 400,
+      "description": "A Microsoft Web API query, which will be sent along with the request. Please, refer to <a href='https://docs.microsoft.com/en-us/powerapps/developer/common-data-service/webapi/query-data-web-api'>this article</a> explaining how to use the querying language.",
+      "format": "textarea",
       "options": {
-        "enum_titles": [
-          "No",
-          "Yes"
-        ]
+        "input_height": "100px"
       }
     },
-    "metrics": {
-      "type": "array",
-      "title": "Example array of group of string objects",
-      "description": "Group of string objects alligned in grid",
-      "items": {
-        "format": "grid",
-        "type": "object",
-        "title": "Items of array, multiple objects",
-        "required": [
-          "metric",
-          "modificator"
-        ],
-        "properties": {
-          "metric": {
-            "enum": [
-              "NoVt",
-              "TotTm",
-              "NoPV"
-            ],
-            "type": "string",
-            "default": "NoPV",
-            "title": "Metric",
-            "description": "First object, enum of strings",
-            "propertyOrder": 1000
-          },
-          "modificator": {
-            "enum": [
-              "none",
-              "change",
-              "share",
-              "share_in_total",
-              "change_in_percentage"
-            ],
-            "type": "string",
-            "title": "Mdificator",
-            "description": "Second object",
-            "default": "daily",
-            "propertyOrder": 2000
-          }
-        }
-      }
+    "incremental": {
+      "type": "boolean",
+      "default": true,
+      "title": "Incremental Load Enabled",
+      "propertyOrder": 450
     }
   }
 }
