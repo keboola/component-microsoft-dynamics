@@ -3,8 +3,6 @@ import os
 import sys
 import logging_gelf.handlers
 import logging_gelf.formatters
-# from dynamics.client import DynamicsClient
-# from dynamics.result import DynamicsWriter
 from dynamics.component import DynamicsComponent
 
 # Environment setup
