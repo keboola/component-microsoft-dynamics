@@ -8,5 +8,4 @@ RUN pip install flake8
 RUN pip install -r /code/requirements.txt
 WORKDIR /code/
 
-
 CMD ["python", "-u", "/code/src/main.py"]

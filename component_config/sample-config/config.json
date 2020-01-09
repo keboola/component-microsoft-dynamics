@@ -29,9 +29,7 @@
     "deal_properties": "",
     "debug": true
   },
-  "image_parameters": {
-    "syrup_url": "https://syrup.keboola.com/"
-  },
+  "image_parameters": {},
   "authorization": {
     "oauth_api": {
       "id": "OAUTH_API_ID",
