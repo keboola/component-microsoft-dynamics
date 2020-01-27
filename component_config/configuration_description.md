@@ -62,21 +62,25 @@ $filter=startswith(firstname,'Name')
 ```
 
 ##### Complete queries
-Complete queries need to be new-line separated or "&" separated. Examples of complete queries are below:
 
-1. Select and filter in last 7 days
-    ```
-    $select=leadid,firstname
-    $filter=Microsoft.Dynamics.CRM.LastXDays(PropertyName='modifiedon',PropertyValue=7)
-    ```
+Complete queries need to be new-line separated or "&" separated. Examples of complete queries are below combining both `$select` and `$filter` are below:
 
-2. Select and attribute and time-based chained filter
-    ```
-    $select=leadid,firstname
-    $filter=Microsoft.Dynamics.CRM.LastXDays(PropertyName='modifiedon',PropertyValue=7) and contains(firstname, 'Name')
-    ```
+**Select and filter in last 7 days**
 
-3. Ampersand delimited query
-    ```
-    $filter=modifiedon gt 2019-01-01&select=emailaddress1
-    ```
+```
+$select=leadid,firstname
+$filter=Microsoft.Dynamics.CRM.LastXDays(PropertyName='modifiedon',PropertyValue=7)
+```
+
+**Select and attribute and time-based chained filter**
+
+```
+$select=leadid,firstname
+$filter=Microsoft.Dynamics.CRM.LastXDays(PropertyName='modifiedon',PropertyValue=7) and contains(firstname, 'Name')
+```
+
+**Ampersand delimited query**
+
+```
+$filter=modifiedon gt 2019-01-01&select=emailaddress1
+```
