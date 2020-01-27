@@ -8,7 +8,7 @@
     "query"
   ],
   "properties": {
-    "resource_url": {
+    "organization_url": {
       "type": "string",
       "title": "Organization URL",
       "description": "URL to the CRM system located in the Dynamics 365 cloud. Usually in format <a href='https://<organization>.crm.dynamics.com'>https://&ltorganization&gt.crm.dynamics.com</a>.",
