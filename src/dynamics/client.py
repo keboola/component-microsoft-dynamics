@@ -117,7 +117,8 @@ class DynamicsClient(HttpClientBase):
 
             else:
 
-                logging.error(f"Could not query endpoint {endpoint}. Received: {scQuery} - {jsQuery['error']['message']}.")
+                logging.error(' '.join([f"Could not query endpoint {endpoint}.",
+                                        f"Received: {scQuery} - {jsQuery['error']['message']}."]))
                 sys.exit(1)
 
         return resultsQuery
