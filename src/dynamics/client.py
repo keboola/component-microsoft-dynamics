@@ -99,7 +99,7 @@ class DynamicsClient(HttpClientBase):
 
         urlQuery = os.path.join(self.base_url, endpoint)
 
-        if query is not None:
+        if query is not None and query != '':
             urlQuery += '?' + query
 
         _nextLink = True
@@ -117,7 +117,7 @@ class DynamicsClient(HttpClientBase):
 
             else:
 
-                logging.error(f"Could not query endpoint {endpoint}. Received: {scQuery} - {jsQuery}.")
+                logging.error(f"Could not query endpoint {endpoint}. Received: {scQuery} - {jsQuery['error']['message']}.")
                 sys.exit(1)
 
         return resultsQuery
