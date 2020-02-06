@@ -5,7 +5,8 @@
     "organization_url",
     "api_version",
     "endpoint",
-    "query"
+    "query",
+    "incremental"
   ],
   "properties": {
     "organization_url": {
@@ -39,22 +40,20 @@
       }
     },
     "incremental": {
-      "type": "boolean",
-      "default": true,
-      "title": "Incremental Load to Storage",
-      "propertyOrder": 450,
-      "description": "Defines, whether all output tables should be loaded incrementally.",
-      "uniqueItems": true,
-      "enum": [
-        true,
-        false
-      ],
-      "options": {
-        "enum_titles": [
-          "Incremental Load",
-          "Full Load"
-        ]
-      }
-    }
+			"type": "boolean",
+			"title": "Load Type",
+			"enum": [
+				true,
+				false
+			],
+			"options": {
+				"enum_titles": [
+					"Incremental Load",
+					"Full Load"
+				]
+			},
+			"default": true,
+			"description": "Incremental load will load the table with primary keys and upsert new data. Full load will overwrite existing table all of the time."
+		}
   }
 }
