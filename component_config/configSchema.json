@@ -43,7 +43,18 @@
       "default": true,
       "title": "Incremental Load to Storage",
       "propertyOrder": 450,
-      "description": "If true, all tables will be loaded to storage incrementally."
+      "description": "Defines, whether all output tables should be loaded incrementally.",
+      "uniqueItems": true,
+      "enum": [
+        true,
+        false
+      ],
+      "options": {
+        "enum_titles": [
+          "Incremental Load",
+          "Full Load"
+        ]
+      }
     }
   }
 }
