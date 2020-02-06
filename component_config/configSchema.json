@@ -53,7 +53,8 @@
 				]
 			},
 			"default": true,
-			"description": "Incremental load will load the table with primary keys and upsert new data. Full load will overwrite existing table all of the time."
+      "description": "Incremental load will load the table with primary keys and upsert new data. Full load will overwrite existing table all of the time.",
+      "propertyOrder": 450
 		}
   }
 }
