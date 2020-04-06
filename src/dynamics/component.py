@@ -5,7 +5,7 @@ from kbc.env_handler import KBCEnvHandler
 from dynamics.client import DynamicsClient
 from dynamics.result import DynamicsWriter
 
-APP_VERSION = '0.1.o'
+APP_VERSION = '0.1.2'
 
 KEY_ORGANIZATIONURL = 'organization_url'
 KEY_ENDPOINT = 'endpoint'
