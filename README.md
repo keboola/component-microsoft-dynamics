@@ -55,6 +55,16 @@ An example of `$select` query would be:
 $select=firstname,lastname,emailaddress1,_accountid_value
 ```
 
+##### Downloading a sample of the data
+
+Using keyword `$top`, you can limit the number of results returned by the API. This is especially useful, if you're unaware what attributes are returned by the API and want to avoid lengthy downloads of all records and all attributes. The `$top` keyword will only returned first X specified records.
+
+An example of `$top` query would be:
+
+```
+$top=5000
+```
+
 ##### Filtering results
 
 Using keyword `$filter`, it's possible to only filter results, which satisy all conditions specified. WebAPI offers a wide range of functions, which allow to filter results to the utmost detail.
@@ -108,6 +118,13 @@ $filter=Microsoft.Dynamics.CRM.LastXDays(PropertyName='modifiedon',PropertyValue
 
 ```
 $filter=modifiedon gt 2019-01-01&select=emailaddress1
+```
+
+**Select and limit**
+
+```
+$select=contactid,fullname,emailaddress1,address1_city
+$top=500
 ```
 
 ## Output

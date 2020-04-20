@@ -137,6 +137,16 @@ class DynamicsClient(HttpClientBase):
 
         else:
 
-            logging.error(' '.join([f"Could not query endpoint {endpoint}.",
-                                    f"Received: {scQuery} - {jsQuery['error']['message']}."]))
+            _err_msg = jsQuery['error']['message']
+
+            if 'Could not find a property named' in _err_msg:
+                _add_msg = 'When querying foreign key fields, do not forget to ommit "fk" part of the field, e.g. ' + \
+                           '"fk_accountid" -> "_accountid". Please, refer to the documentation for more information.'
+
+            else:
+                _add_msg = ''
+
+            logging.error(''.join([f"Could not query endpoint \"{endpoint}\". ",
+                                   f"Received: {scQuery} - {_err_msg} ",
+                                   _add_msg]))
             sys.exit(1)
