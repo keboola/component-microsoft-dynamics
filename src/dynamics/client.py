@@ -1,21 +1,39 @@
 import logging
 import os
+import requests
 import sys
 from kbc.client_base import HttpClientBase
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 
-BASE_URL_REFRESH = 'https://login.microsoftonline.com/common/oauth2/token'
+class DynamicsClient(HttpClientBase):
 
+    MSFT_LOGIN_URL = 'https://login.microsoftonline.com/common/oauth2/token'
+    MAX_RETRIES = 7
+    PAGE_SIZE = 2000
 
-class DynamicsClientRefresh(HttpClientBase):
+    def __init__(self, clientId, clientSecret, resourceUrl, refreshToken, apiVersion):
 
-    def __init__(self):
+        self.parClientId = clientId
+        self.parClientSecret = clientSecret
+        self.parResourceUrl = os.path.join(resourceUrl, 'api/data', apiVersion)
+        self.parResourceUrlBase = os.path.join(resourceUrl, '')
+        self.parRefreshToken = refreshToken
+        self.parApiVersion = apiVersion
 
-        super().__init__(base_url=BASE_URL_REFRESH)
+        super().__init__(base_url=self.parResourceUrl, max_retries=self.MAX_RETRIES)
+        _accessToken = self.refreshToken()
 
-    def refreshAccessToken(self, clientId, clientSecret, resourceUrl, refreshToken):
+        _defHeader = {
+            'Authorization': f'Bearer {_accessToken}',
+            'Accept': 'application/json'
+        }
 
-        logging.debug("Refreshing access token.")
+        self._auth_header = _defHeader
+        self.getEntityMetadata()
+
+    def refreshToken(self):
 
         headersRefresh = {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -23,50 +41,52 @@ class DynamicsClientRefresh(HttpClientBase):
         }
 
         bodyRefresh = {
-            'client_id': clientId,
+            'client_id': self.parClientId,
             'grant_type': 'refresh_token',
-            'client_secret': clientSecret,
-            'resource': resourceUrl,
-            'refresh_token': refreshToken
+            'client_secret': self.parClientSecret,
+            'resource': self.parResourceUrlBase,
+            'refresh_token': self.parRefreshToken
         }
 
-        reqRefresh = self.post_raw(url=self.base_url, headers=headersRefresh, data=bodyRefresh)
+        reqRefresh = self.post_raw(url=self.MSFT_LOGIN_URL, headers=headersRefresh, data=bodyRefresh)
         scRefresh, jsRefresh = reqRefresh.status_code, reqRefresh.json()
 
         if scRefresh == 200:
-
             logging.debug("Token refreshed successfully.")
             return jsRefresh['access_token']
 
         else:
-
             logging.error(f"Could not refresh access token. Received {scRefresh} - {jsRefresh}.")
             sys.exit(1)
 
+    def __response_hook(self, res, *args, **kwargs):
 
-class DynamicsClient(HttpClientBase):
+        if res.status_code == 401:
+            token = self.refreshToken()
+            self._auth_header = {"Authorization": f'Bearer {token}',
+                                 "Content-Type": "application/json"}
 
-    def __init__(self, clientId, clientSecret, resourceUrl, refreshToken, apiVersion):
+            res.request.headers['Authorization'] = f'Bearer {token}'
+            s = requests.Session()
+            return self.requests_retry_session(session=s).send(res.request)
 
-        self.parClientId = clientId
-        self.parClientSecret = clientSecret
+    def requests_retry_session(self, session=None):
 
-        self.parAccessToken = self.refreshToken(self.parClientId, self.parClientSecret,
-                                                os.path.join(resourceUrl, ''), refreshToken)
-
-        _defHeader = {
-            'Authorization': f'Bearer {self.parAccessToken}',
-            'Accept': 'application/json'
-        }
-
-        self.parResourceUrl = os.path.join(resourceUrl, 'api/data', apiVersion)
-
-        super().__init__(base_url=self.parResourceUrl, default_http_header=_defHeader)
-        self.getEntityMetadata()
-
-    def refreshToken(self, clientId, clientSecret, resourceUrl, refreshToken):
-
-        return DynamicsClientRefresh().refreshAccessToken(clientId, clientSecret, resourceUrl, refreshToken)
+        session = session or requests.Session()
+        retry = Retry(
+            total=self.max_retries,
+            read=self.max_retries,
+            connect=self.max_retries,
+            backoff_factor=self.backoff_factor,
+            status_forcelist=self.status_forcelist,
+            method_whitelist=('GET', 'POST', 'PATCH', 'UPDATE', 'DELETE')
+        )
+        adapter = HTTPAdapter(max_retries=retry)
+        session.mount('http://', adapter)
+        session.mount('https://', adapter)
+        # append response hook
+        session.hooks['response'].append(self.__response_hook)
+        return session
 
     def getEntityMetadata(self):
 
@@ -90,36 +110,33 @@ class DynamicsClient(HttpClientBase):
             logging.error(f"Received: {scMeta} - {jsMeta}.")
             sys.exit(1)
 
-    def queryData(self, endpoint, query=None):
-
-        resultsQuery = []
+    def downloadData(self, endpoint, query=None, nextLinkUrl=None):
 
         headersQuery = {
-            'Prefer': 'odata.maxpagesize=5000'
+            'Prefer': f'odata.maxpagesize={self.PAGE_SIZE}'
         }
 
-        urlQuery = os.path.join(self.base_url, endpoint)
+        if nextLinkUrl is not None and nextLinkUrl != '':
+            urlQuery = nextLinkUrl
 
-        if query is not None and query != '':
-            urlQuery += '?' + query
+        else:
+            urlQuery = os.path.join(self.base_url, endpoint)
 
-        _nextLink = True
+            if query is not None and query != '':
+                urlQuery += '?' + query
 
-        while _nextLink is True:
+        reqQuery = self.get_raw(url=urlQuery, headers=headersQuery)
+        scQuery, jsQuery = reqQuery.status_code, reqQuery.json()
 
-            reqQuery = self.get_raw(url=urlQuery, headers=headersQuery)
-            scQuery, jsQuery = reqQuery.status_code, reqQuery.json()
+        if scQuery == 200:
 
-            if scQuery == 200:
+            _results = jsQuery['value']
+            _nextLink = jsQuery.get('@odata.nextLink', None)
 
-                resultsQuery += jsQuery['value']
-                urlQuery = jsQuery.get('@odata.nextLink', None)
-                _nextLink = True if urlQuery else False
+            return _results, _nextLink
 
-            else:
+        else:
 
-                logging.error(' '.join([f"Could not query endpoint {endpoint}.",
-                                        f"Received: {scQuery} - {jsQuery['error']['message']}."]))
-                sys.exit(1)
-
-        return resultsQuery
+            logging.error(' '.join([f"Could not query endpoint {endpoint}.",
+                                    f"Received: {scQuery} - {jsQuery['error']['message']}."]))
+            sys.exit(1)

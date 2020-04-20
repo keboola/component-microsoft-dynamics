@@ -5,24 +5,24 @@ import os
 
 class DynamicsWriter:
 
-    def __init__(self, outputPath, tableFilename, writeObject, primaryKeys=[], incremental=True):
+    def __init__(self, outputPath, tableFilename, writerObject, primaryKeys=[], incremental=True):
 
         self.parOutputPath = outputPath
-        self.parTableName = tableFilename
-        self.patFullTablePath = os.path.join(outputPath, tableFilename)
-        self.parWriteObject = writeObject
-        self.parPrimaryKeys = primaryKeys
+        self.parTableName = tableFilename + '.csv'
+        self.parFullTablePath = os.path.join(self.parOutputPath, self.parTableName)
         self.parIncremental = incremental
+        self.parObject = writerObject
+        self.parPrimaryKeys = primaryKeys
 
         self.getAndMapColumns()
         self.createManifest()
-        self.processFile()
+        self.createWriter()
 
     def getAndMapColumns(self):
 
         allColumns = []
 
-        for o in self.parWriteObject:
+        for o in self.parObject:
             allColumns += o.keys()
 
         allColumns = list(set(allColumns))
@@ -41,6 +41,13 @@ class DynamicsWriter:
 
         self.varMapColumns = mapColumns
 
+    def createWriter(self):
+
+        self.writer = csv.DictWriter(open(self.parFullTablePath, 'w'),
+                                     fieldnames=list(self.varMapColumns.keys()),
+                                     restval='', extrasaction='ignore',
+                                     quotechar='"', quoting=csv.QUOTE_ALL)
+
     def createManifest(self):
 
         template = {
@@ -49,17 +56,10 @@ class DynamicsWriter:
             'columns': list(self.varMapColumns.values())
         }
 
-        with open(self.patFullTablePath + '.manifest', 'w') as manFile:
+        with open(self.parFullTablePath + '.manifest', 'w') as manFile:
 
             json.dump(template, manFile)
 
-    def processFile(self):
+    def writerows(self, dataToWrite):
 
-        with open(self.patFullTablePath, 'w') as outputTable:
-
-            writer = csv.DictWriter(outputTable, fieldnames=list(self.varMapColumns.keys()),
-                                    restval='', extrasaction='ignore',
-                                    quotechar='"', quoting=csv.QUOTE_ALL)
-
-            for row in self.parWriteObject:
-                writer.writerow(row)
+        self.writer.writerows(dataToWrite)
