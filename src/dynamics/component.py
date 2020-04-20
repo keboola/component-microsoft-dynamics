@@ -83,7 +83,7 @@ class DynamicsComponent(KBCEnvHandler):
                     if len(_results) == 0:
                         logging.info(f"No data returned for endpoint \"{self.parEndpoint}\".")
                         _has_more = False
-                        continue
+                        sys.exit(0)
 
                     else:
                         self.writer = DynamicsWriter(self.tables_out_path, self.parEndpoint, _results,
@@ -95,6 +95,6 @@ class DynamicsComponent(KBCEnvHandler):
                 _has_more = True if _next_link else False
 
                 if _req_count % 20 == 0:
-                    logging.info(f"Made {_req_count} requests to the API for endpoint \"{self.parEndpoint}\".")
+                    logging.info(f"Made {_req_count} requests to the API so far.")
 
         logging.info(f"Made {_req_count} requests to the API in total for endpoint \"{self.parEndpoint}\".")
