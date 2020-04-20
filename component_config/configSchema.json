@@ -20,14 +20,14 @@
       "type": "string",
       "title": "API Version",
       "propertyOrder": 200,
-      "description": "The API version, which will be used to query the data. For a list of available versions, please, refer to <a href='https://docs.microsoft.com/en-us/dynamics365/customerengagement/on-premises/developer/webapi/web-api-versions' target='_blank'>Microsoft's Web API documentation</a>.",
+      "description": "The API version, which will be used to query the data. For a list of available versions, please, refer to <a href='https://docs.microsoft.com/en-us/dynamics365/customerengagement/on-premises/developer/webapi/web-api-versions' target='_blank'>Microsoft's Web API Versions</a> article, or <a href='https://docs.microsoft.com/en-us/powerapps/developer/common-data-service/webapi/compose-http-requests-handle-errors#web-api-url-and-versions' target='_blank'>here</a> for the most recent version number.",
       "minLength": 4
     },
     "endpoint": {
       "type": "string",
       "title": "Endpoint",
       "propertyOrder": 300,
-      "description": "The entity, which will be queried against. For a list of available entities, please, refer to <a href='https://docs.microsoft.com/en-us/dynamics365/customer-engagement/web-api/entitytypes' target='_blank'>entity documentation</a>. For a list of custom entities, please refer to component documentation."
+      "description": "The entity, which will be queried against. For a list of available entities, please, refer to <a href='https://docs.microsoft.com/en-us/dynamics365/customer-engagement/web-api/entitytypes' target='_blank'>entity documentation</a>. For a list of custom entities, please refer to component documentation, or check the job log."
     },
     "query": {
       "type": "string",
@@ -40,11 +40,11 @@
       }
     },
     "incremental": {
-			"type": "boolean",
+			"type": "number",
 			"title": "Load Type",
 			"enum": [
-				true,
-				false
+				1,
+				0
 			],
 			"options": {
 				"enum_titles": [
@@ -52,7 +52,7 @@
 					"Full Load"
 				]
 			},
-			"default": true,
+			"default": 1,
       "description": "Incremental load will load the table with primary keys and upsert new data. Full load will overwrite existing table all of the time.",
       "propertyOrder": 450
 		}
