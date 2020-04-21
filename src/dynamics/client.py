@@ -35,6 +35,8 @@ class DynamicsClient(HttpClientBase):
 
     def refreshToken(self):
 
+        self._auth_header = {}
+
         headersRefresh = {
             'Content-Type': 'application/x-www-form-urlencoded',
             'Accept': 'application/json'
@@ -52,7 +54,7 @@ class DynamicsClient(HttpClientBase):
         scRefresh, jsRefresh = reqRefresh.status_code, reqRefresh.json()
 
         if scRefresh == 200:
-            logging.debug("Token refreshed successfully.")
+            logging.debug("Access token refreshed successfully.")
             return jsRefresh['access_token']
 
         else:
@@ -64,7 +66,7 @@ class DynamicsClient(HttpClientBase):
         if res.status_code == 401:
             token = self.refreshToken()
             self._auth_header = {"Authorization": f'Bearer {token}',
-                                 "Content-Type": "application/json"}
+                                 "Accept": "application/json"}
 
             res.request.headers['Authorization'] = f'Bearer {token}'
             s = requests.Session()
