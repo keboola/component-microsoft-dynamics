@@ -6,7 +6,7 @@ from kbc.env_handler import KBCEnvHandler
 from dynamics.client import DynamicsClient
 from dynamics.result import DynamicsWriter
 
-APP_VERSION = '1.0.0'
+APP_VERSION = '1.0.1'
 
 KEY_ORGANIZATIONURL = 'organization_url'
 KEY_ENDPOINT = 'endpoint'
@@ -29,7 +29,7 @@ class DynamicsComponent(KBCEnvHandler):
 
     def __init__(self):
 
-        super().__init__(mandatory_params=MANDATORY_PARAMS, log_level='DEBUG')
+        super().__init__(mandatory_params=MANDATORY_PARAMS, log_level='INFO')
         logging.info("Running component version %s..." % APP_VERSION)
         self.validate_config(MANDATORY_PARAMS)
 
