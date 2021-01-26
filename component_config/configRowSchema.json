@@ -1,0 +1,44 @@
+{
+    "type": "object",
+    "title": "Parameters",
+    "required": [
+      "endpoint",
+      "query",
+      "incremental"
+    ],
+    "properties": {
+      "query": {
+        "type": "string",
+        "title": "Query (advanced)",
+        "format": "textarea",
+        "options": {
+          "input_height": "100px"
+        },
+        "description": "A Microsoft Web API query, which will be sent along with the request. All pieces of query can be separated by new-line or \"&\".</br>Please, refer to <a href='https://docs.microsoft.com/en-us/powerapps/developer/common-data-service/webapi/query-data-web-api'>this article</a> explaining how to use the querying language.",
+        "propertyOrder": 400
+      },
+      "endpoint": {
+        "type": "string",
+        "title": "Endpoint",
+        "description": "The entity, which will be queried against. For a list of available entities, please, refer to <a href='https://docs.microsoft.com/en-us/dynamics365/customer-engagement/web-api/entitytypes' target='_blank'>entity documentation</a>. For a list of custom entities, please refer to component documentation, or check the job log.",
+        "propertyOrder": 300
+      },
+      "incremental": {
+        "enum": [
+          1,
+          0
+        ],
+        "type": "number",
+        "title": "Load Type",
+        "default": 1,
+        "options": {
+          "enum_titles": [
+            "Incremental Load",
+            "Full Load"
+          ]
+        },
+        "description": "Incremental load will load the table with primary keys and upsert new data. Full load will overwrite existing table all of the time.",
+        "propertyOrder": 450
+      }
+    }
+  }

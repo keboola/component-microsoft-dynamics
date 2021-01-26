@@ -1,60 +1,24 @@
 {
   "type": "object",
-  "title": "Parameters",
+  "title": "API Settings",
   "required": [
     "organization_url",
-    "api_version",
-    "endpoint",
-    "query",
-    "incremental"
+    "api_version"
   ],
   "properties": {
-    "organization_url": {
-      "type": "string",
-      "title": "Organization URL",
-      "description": "URL to the CRM system located in the Dynamics 365 cloud. Usually in format <a href='https://<organization>.crm.dynamics.com'>https://&ltorganization&gt.crm.dynamics.com</a>.",
-      "propertyOrder": 100,
-      "minLength": 20
-    },
     "api_version": {
       "type": "string",
       "title": "API Version",
-      "propertyOrder": 200,
+      "minLength": 4,
       "description": "The API version, which will be used to query the data. For a list of available versions, please, refer to <a href='https://docs.microsoft.com/en-us/dynamics365/customerengagement/on-premises/developer/webapi/web-api-versions' target='_blank'>Microsoft's Web API Versions</a> article, or <a href='https://docs.microsoft.com/en-us/powerapps/developer/common-data-service/webapi/compose-http-requests-handle-errors#web-api-url-and-versions' target='_blank'>here</a> for the most recent version number.",
-      "minLength": 4
+      "propertyOrder": 200
     },
-    "endpoint": {
+    "organization_url": {
       "type": "string",
-      "title": "Endpoint",
-      "propertyOrder": 300,
-      "description": "The entity, which will be queried against. For a list of available entities, please, refer to <a href='https://docs.microsoft.com/en-us/dynamics365/customer-engagement/web-api/entitytypes' target='_blank'>entity documentation</a>. For a list of custom entities, please refer to component documentation, or check the job log."
-    },
-    "query": {
-      "type": "string",
-      "title": "Query (advanced)",
-      "propertyOrder": 400,
-      "description": "A Microsoft Web API query, which will be sent along with the request. All pieces of query can be separated by new-line or \"&\".</br>Please, refer to <a href='https://docs.microsoft.com/en-us/powerapps/developer/common-data-service/webapi/query-data-web-api'>this article</a> explaining how to use the querying language.",
-      "format": "textarea",
-      "options": {
-        "input_height": "100px"
-      }
-    },
-    "incremental": {
-			"type": "number",
-			"title": "Load Type",
-			"enum": [
-				1,
-				0
-			],
-			"options": {
-				"enum_titles": [
-					"Incremental Load",
-					"Full Load"
-				]
-			},
-			"default": 1,
-      "description": "Incremental load will load the table with primary keys and upsert new data. Full load will overwrite existing table all of the time.",
-      "propertyOrder": 450
-		}
+      "title": "Organization URL",
+      "minLength": 20,
+      "description": "URL to the CRM system located in the Dynamics 365 cloud. Usually in format <a href='https://<organization>.crm.dynamics.com'>https://&ltorganization&gt.crm.dynamics.com</a>.",
+      "propertyOrder": 100
+    }
   }
 }

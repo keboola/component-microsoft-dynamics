@@ -6,13 +6,14 @@ from kbc.env_handler import KBCEnvHandler
 from dynamics.client import DynamicsClient
 from dynamics.result import DynamicsWriter
 
-APP_VERSION = '0.1.5'
+APP_VERSION = '1.0.0'
 
 KEY_ORGANIZATIONURL = 'organization_url'
 KEY_ENDPOINT = 'endpoint'
 KEY_API_VERSION = 'api_version'
 KEY_INCREMENTAL = 'incremental'
 KEY_QUERY = 'query'
+KEY_DEBUG = 'debug'
 
 MANDATORY_PARAMS = [KEY_ORGANIZATIONURL, KEY_ENDPOINT, KEY_API_VERSION]
 
@@ -20,6 +21,8 @@ AUTH_APPKEY = 'appKey'
 AUTH_APPSECRET = '#appSecret'
 AUTH_APPDATA = '#data'
 AUTH_APPDATA_REFRESHTOKEN = 'refresh_token'
+
+sys.tracebacklimit = 0
 
 
 class DynamicsComponent(KBCEnvHandler):
@@ -29,6 +32,12 @@ class DynamicsComponent(KBCEnvHandler):
         super().__init__(mandatory_params=MANDATORY_PARAMS, log_level='DEBUG')
         logging.info("Running component version %s..." % APP_VERSION)
         self.validate_config(MANDATORY_PARAMS)
+
+        if self.cfg_params.get(KEY_DEBUG, False) is True:
+            logger = logging.getLogger()
+            logger.setLevel(level='DEBUG')
+
+            sys.tracebacklimit = 3
 
         auth = self.get_authorization()
         self.parClientId = auth[AUTH_APPKEY]
