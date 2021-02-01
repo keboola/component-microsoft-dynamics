@@ -6,7 +6,7 @@ from kbc.env_handler import KBCEnvHandler
 from dynamics.client import DynamicsClient
 from dynamics.result import DynamicsWriter
 
-APP_VERSION = '1.0.1'
+APP_VERSION = '1.0.2'
 
 KEY_ORGANIZATIONURL = 'organization_url'
 KEY_ENDPOINT = 'endpoint'
@@ -56,6 +56,14 @@ class DynamicsComponent(KBCEnvHandler):
         self.client = DynamicsClient(self.parClientId, self.parClientSecret,
                                      self.parResourceUrl, self.parRefreshToken,
                                      self.parApiVersion)
+
+    def get_authorization(self):
+
+        try:
+            return self.configuration.config_data["authorization"]["oauth_api"]["credentials"]
+        except KeyError:
+            logging.error("Authorization is missing in configuration file.")
+            exit(1)
 
     def run(self):
 
