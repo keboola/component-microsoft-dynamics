@@ -23,6 +23,13 @@
         "description": "The entity, which will be queried against. For a list of available entities, please, refer to <a href='https://docs.microsoft.com/en-us/dynamics365/customer-engagement/web-api/entitytypes' target='_blank'>entity documentation</a>. For a list of custom entities, please refer to component documentation, or check the job log.",
         "propertyOrder": 300
       },
+      "download_formatted_values": {
+        "type": "boolean",
+        "format" : "checkbox",
+        "title": "Download Formatted Values",
+        "description": "Select this option to receive formatted values for properties with the results",
+        "propertyOrder": 425
+      },
       "incremental": {
         "enum": [
           1,

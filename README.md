@@ -38,6 +38,12 @@ For a list of default Microsoft defined entities, please visit [Web API EntityTy
 
 If application receives an endpoint (entity), which is not part of the CRM instance, the run will be terminated.
 
+#### Download Formatted Values (`download_formatted_values`)
+
+When you want to receive [formatted values](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/query-data-web-api#include-formatted-values) 
+for properties with the results, set this value to true. The response will include the raw values with properties that match the following naming convention:
+<propertyname>_formattedValue.
+
 #### Query (`query`)
 
 A WebAPI query allows users to further specify results which should be retrieved from the Microsoft Dynamics 365 instance. A basic tutorial on how to query data can be found in the [WebAPI documentation](https://docs.microsoft.com/en-us/powerapps/developer/common-data-service/webapi/query-data-web-api). Individual pieces of the query need to be separated by a new line or by ampersand (&). Below are discussed some examples.

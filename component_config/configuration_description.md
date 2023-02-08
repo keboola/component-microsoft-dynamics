@@ -23,6 +23,12 @@ A WebAPI query allows users to further specify results which should be retrieved
 
 For a complete list of query functions that can be used in the query, refer to [Query Function reference](https://docs.microsoft.com/en-us/dynamics365/customer-engagement/web-api/queryfunctions). Please note, that all keywords must start with `$`.
 
+### Download Formatted Values (`download_formatted_values`)
+
+When you want to receive [formatted values](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/query-data-web-api#include-formatted-values) 
+for properties with the results, set this value to true. The response will include the raw values with properties that match the following naming convention:
+<propertyname>_formattedValue.
+
 #### Selecting relevant columns
 
 Using keyword `$select`, it's possible to only specify columns which should be returned from the API. The list of columms should be comma-separated. If nothing is specified, all columns are returned.

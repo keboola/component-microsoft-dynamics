@@ -14,6 +14,7 @@ KEY_API_VERSION = 'api_version'
 KEY_INCREMENTAL = 'incremental'
 KEY_QUERY = 'query'
 KEY_DEBUG = 'debug'
+KEY_DOWNLOAD_FORMATTED_VALUES = "download_formatted_values"
 
 MANDATORY_PARAMS = [KEY_ORGANIZATIONURL, KEY_ENDPOINT, KEY_API_VERSION]
 
@@ -52,6 +53,7 @@ class DynamicsComponent(KBCEnvHandler):
         self.parResourceUrl = self.cfg_params[KEY_ORGANIZATIONURL]
         self.parQuery = '&'.join([q for q in self.cfg_params.get(KEY_QUERY, '').split('\n') if q != ''])
         self.parIncremental = bool(self.cfg_params.get(KEY_INCREMENTAL, True))
+        self.download_formatted_values = bool(self.cfg_params.get(KEY_DOWNLOAD_FORMATTED_VALUES, False))
 
         self.client = DynamicsClient(self.parClientId, self.parClientSecret,
                                      self.parResourceUrl, self.parRefreshToken,
@@ -93,7 +95,8 @@ class DynamicsComponent(KBCEnvHandler):
                 _req_count += 1
                 _results, _next_link = self.client.downloadData(self.parEndpoint,
                                                                 query=self.parQuery,
-                                                                nextLinkUrl=_next_link)
+                                                                nextLinkUrl=_next_link,
+                                                                download_formatted_values=self.download_formatted_values)  # noqa
 
                 if _has_wrtr is False:
 

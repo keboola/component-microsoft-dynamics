@@ -8,7 +8,6 @@ from urllib3.util.retry import Retry
 
 
 class DynamicsClient(HttpClientBase):
-
     MSFT_LOGIN_URL = 'https://login.microsoftonline.com/common/oauth2/token'
     MAX_RETRIES = 7
     PAGE_SIZE = 2000
@@ -112,10 +111,14 @@ class DynamicsClient(HttpClientBase):
             logging.error(f"Received: {scMeta} - {jsMeta}.")
             sys.exit(1)
 
-    def downloadData(self, endpoint, query=None, nextLinkUrl=None):
+    def downloadData(self, endpoint, query=None, nextLinkUrl=None, download_formatted_values=False):
+
+        prefer_value = f"odata.maxpagesize={self.PAGE_SIZE}"
+        if download_formatted_values:
+            prefer_value = f'{prefer_value}, odata.include-annotations="OData.Community.Display.V1.FormattedValue"'
 
         headersQuery = {
-            'Prefer': f'odata.maxpagesize={self.PAGE_SIZE}'
+            'Prefer': prefer_value
         }
 
         if nextLinkUrl is not None and nextLinkUrl != '':
