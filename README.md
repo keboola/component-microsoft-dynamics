@@ -8,6 +8,14 @@ Microsoft Dynamics 365 is a product line of customer relationship management by 
 
 The extractor utilizes WebAPI Graph API and supports all versions of the API. For more information about the WebAPI, please read [the API reference](https://docs.microsoft.com/en-us/dynamics365/customer-engagement/web-api/about).
 
+
+## Developer Notes
+
+This component utilizes the Microsoft Dataverse Web API, which is for extending/ getting data in and out of
+Power Apps (which Microsoft Dynamics 365 is ). The documentation of the dataverse can be found [here](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/overview).
+
+
+
 ## Configuration
 
 A sample configuration of the writer can be found in [component's repository](https://bitbucket.org/kds_consulting_team/kds-team.wr-microsoft-dynamics/src/master/component_config/sample-config/). 
