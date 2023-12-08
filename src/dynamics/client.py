@@ -91,15 +91,15 @@ class DynamicsClient(HttpClientBase):
 
     def getEntityMetadata(self):
 
+        """
         urlMeta = os.path.join(self.base_url, 'EntityDefinitions')
         paramsMeta = {
             '$select': 'PrimaryIdAttribute,EntitySetName'
         }
+        """
 
         urlMeta = os.path.join(self.base_url, 'DMExportJobs')
         reqMeta = self.get_raw(url=urlMeta)
-
-
 
         # reqMeta = self.get_raw(url=urlMeta, params=paramsMeta)
         logging.info(reqMeta)
