@@ -97,7 +97,10 @@ class DynamicsClient(HttpClientBase):
         }
 
         reqMeta = self.get_raw(url=urlMeta, params=paramsMeta)
+        logging.info(reqMeta)
         logging.info(reqMeta.text)
+        sys.exit(1)
+
         scMeta, jsMeta = reqMeta.status_code, reqMeta.json()
 
         if scMeta == 200:
