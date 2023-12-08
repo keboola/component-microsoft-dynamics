@@ -96,7 +96,12 @@ class DynamicsClient(HttpClientBase):
             '$select': 'PrimaryIdAttribute,EntitySetName'
         }
 
-        reqMeta = self.get_raw(url=urlMeta, params=paramsMeta)
+        urlMeta = os.path.join(self.base_url, 'DMExportJobs')
+        reqMeta = self.get_raw(url=urlMeta)
+
+
+
+        # reqMeta = self.get_raw(url=urlMeta, params=paramsMeta)
         logging.info(reqMeta)
         logging.info(reqMeta.text)
         sys.exit(1)
