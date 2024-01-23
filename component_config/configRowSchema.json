@@ -3,34 +3,74 @@
     "title": "Parameters",
     "required": [
       "endpoint",
-      "query",
       "incremental"
     ],
     "properties": {
+      "endpoint": {
+        "propertyOrder": 1,
+        "type": "array",
+        "title": "Endpoint",
+        "description": "The entity, which will be queried against.",
+        "items": {
+          "enum": [],
+          "type": "string"
+        },
+        "format": "select",
+        "uniqueItems": true,
+        "options": {
+          "async": {
+            "label": "Re-load endpoints",
+            "action": "get_endpoints"
+          }
+        }
+      },
+      "use_advanced_query": {
+        "propertyOrder": 2,
+        "type": "boolean",
+        "format" : "checkbox",
+        "default": false,
+        "title": "Advanced mode",
+        "description": "Select this option to enter query"
+      },
       "query": {
+        "propertyOrder": 3,
         "type": "string",
         "title": "Query (advanced)",
         "format": "textarea",
         "options": {
-          "input_height": "100px"
+          "input_height": "100px",
+          "dependencies": {
+            "use_advanced_query": true
+          }
         },
-        "description": "A Microsoft Web API query, which will be sent along with the request. All pieces of query can be separated by new-line or \"&\".</br>Please, refer to <a href='https://docs.microsoft.com/en-us/powerapps/developer/common-data-service/webapi/query-data-web-api'>this article</a> explaining how to use the querying language.",
-        "propertyOrder": 400
+        "description": "A Microsoft Web API query, which will be sent along with the request. All pieces of query can be separated by new-line or \"&\".</br>Please, refer to <a href='https://docs.microsoft.com/en-us/powerapps/developer/common-data-service/webapi/query-data-web-api'>this article</a> explaining how to use the querying language."
       },
-      "endpoint": {
+      "show_query_examples": {
+        "propertyOrder": 4,
+        "type": "boolean",
+        "format" : "checkbox",
+        "default": false,
+        "title": "Show query examples"
+      },
+      "query_example": {
+        "propertyOrder": 5,
         "type": "string",
-        "title": "Endpoint",
-        "description": "The entity, which will be queried against. For a list of available entities, please, refer to <a href='https://docs.microsoft.com/en-us/dynamics365/customer-engagement/web-api/entitytypes' target='_blank'>entity documentation</a>. For a list of custom entities, please refer to component documentation, or check the job log.",
-        "propertyOrder": 300
+        "description": "",
+        "options": {
+          "dependencies": {
+            "show_query_examples": true
+          }
+        }
       },
       "download_formatted_values": {
+        "propertyOrder": 6,
         "type": "boolean",
         "format" : "checkbox",
         "title": "Download Formatted Values",
-        "description": "Select this option to receive formatted values for properties with the results",
-        "propertyOrder": 425
+        "description": "Select this option to receive formatted values for properties with the results"
       },
       "incremental": {
+        "propertyOrder": 7,
         "enum": [
           1,
           0
@@ -44,8 +84,7 @@
             "Full Load"
           ]
         },
-        "description": "Incremental load will load the table with primary keys and upsert new data. Full load will overwrite existing table all of the time.",
-        "propertyOrder": 450
+        "description": "Incremental load will load the table with primary keys and upsert new data. Full load will overwrite existing table all of the time."
       }
     }
   }
