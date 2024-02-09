@@ -80,7 +80,8 @@ class DynamicsClient(HttpClientBase):
             connect=self.max_retries,
             backoff_factor=self.backoff_factor,
             status_forcelist=self.status_forcelist,
-            method_whitelist=('GET', 'POST', 'PATCH', 'UPDATE', 'DELETE')
+            raise_on_status=False,
+            allowed_methods=('GET', 'POST', 'PATCH', 'UPDATE', 'DELETE')
         )
         adapter = HTTPAdapter(max_retries=retry)
         session.mount('http://', adapter)
@@ -141,7 +142,7 @@ class DynamicsClient(HttpClientBase):
             return _results, _nextLink
 
         else:
-
+            logging.error(jsQuery)
             _err_msg = jsQuery['error']['message']
 
             if 'Could not find a property named' in _err_msg:
