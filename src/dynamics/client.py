@@ -6,6 +6,7 @@ from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 from keboola.component import UserException
 
+
 class DynamicsClient(HttpClient):
     MSFT_LOGIN_URL = 'https://login.microsoftonline.com/common/oauth2/token'
     MAX_RETRIES = 7
