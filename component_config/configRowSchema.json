@@ -12,18 +12,13 @@
       "title": "Endpoint",
       "description": "The entity, which will be queried against. For a list of available entities, please, refer to <a href='https://docs.microsoft.com/en-us/dynamics365/customer-engagement/web-api/entitytypes' target='_blank'>entity documentation</a>. For a list of custom entities, please refer to component documentation, or check the job log.",
       "propertyOrder": 300,
-      "items": {
-        "enum": [],
-        "type": "string"
-      },
       "enum": [],
       "format": "select",
       "uniqueItems": true,
       "options": {
         "async": {
           "label": "Re-load available endpoints",
-          "action": "list_endpoints",
-          "autoload": []
+          "action": "list_endpoints"
         }
       }
     },

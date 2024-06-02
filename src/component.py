@@ -18,7 +18,7 @@ KEY_QUERY = 'query'
 KEY_DEBUG = 'debug'
 KEY_DOWNLOAD_FORMATTED_VALUES = "download_formatted_values"
 
-MANDATORY_PARAMS = [KEY_ORGANIZATIONURL, KEY_ENDPOINT, KEY_API_VERSION]
+MANDATORY_PARAMS = [KEY_ORGANIZATIONURL, KEY_API_VERSION]
 
 AUTH_APPKEY = 'appKey'
 AUTH_APPSECRET = '#appSecret'
@@ -33,7 +33,6 @@ class Component(ComponentBase):
     def __init__(self):
 
         super().__init__()
-        logging.info("Running component version %s..." % APP_VERSION)
 
         self.cfg_params = self.configuration.parameters
 
@@ -52,7 +51,7 @@ class Component(ComponentBase):
         auth_data = json.loads(auth[AUTH_APPDATA])
         self.parRefreshToken = auth_data[AUTH_APPDATA_REFRESHTOKEN]
 
-        self.par_endpoint = self.cfg_params[KEY_ENDPOINT].lower()
+        self.par_endpoint = self.cfg_params.get(KEY_ENDPOINT, '').lower()
         self.parTable = self.par_endpoint + '.csv'
         self.parApiVersion = self.cfg_params[KEY_API_VERSION]
         self.parResourceUrl = self.cfg_params[KEY_ORGANIZATIONURL]
@@ -79,7 +78,7 @@ class Component(ComponentBase):
 
     def run(self):
 
-        pass
+        logging.info("Running component version %s..." % APP_VERSION)
 
         if self.par_endpoint not in self.client.var_api_objects:
 
@@ -140,7 +139,7 @@ class Component(ComponentBase):
         except Exception as e:
             raise UserException(f"Failed to list endpoints: {e}")
 
-        return [SelectElement(value=obj, label=obj) for obj in self.client.var_api_objects.keys()]
+        return [SelectElement(value=obj, label=obj) for obj in list(self.client.var_api_objects.keys())]
 
 
 """
