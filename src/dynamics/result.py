@@ -7,41 +7,41 @@ FORMATTED_VALUE_LABEL = "@OData.Community.Display.V1.FormattedValue"
 
 class DynamicsWriter:
 
-    def __init__(self, outputPath, tableFilename, writerObject, primaryKeys=None, incremental=True):
-        if primaryKeys is None:
-            primaryKeys = []
+    def __init__(self, output_path, table_filename, writer_object, primary_keys=None, incremental=True):
+        if primary_keys is None:
+            primary_keys = []
 
-        self.parOutputPath = outputPath
-        self.parTableName = f'{tableFilename}.csv'
-        self.parFullTablePath = os.path.join(self.parOutputPath, self.parTableName)
-        self.parIncremental = incremental
-        self.parObject = writerObject
-        self.parPrimaryKeys = primaryKeys
-        self.getAndMapColumns()
-        self.createManifest()
-        self.createWriter()
+        self.par_output_path = output_path
+        self.par_table_name = f'{table_filename}.csv'
+        self.par_full_table_path = os.path.join(self.par_output_path, self.par_table_name)
+        self.par_incremental = incremental
+        self.par_object = writer_object
+        self.par_primary_keys = primary_keys
+        self.get_and_map_columns()
+        self.create_manifest()
+        self.create_writer()
 
-    def getAndMapColumns(self):
+    def get_and_map_columns(self):
 
-        allColumns = []
+        all_columns = []
 
-        for o in self.parObject:
-            allColumns += o.keys()
+        for o in self.par_object:
+            all_columns += o.keys()
 
-        allColumns = list(set(allColumns))
-        mapColumns = {}
+        all_columns = list(set(all_columns))
+        map_columns = {}
 
-        for column in allColumns:
+        for column in all_columns:
             if column.startswith('_') is True:
-                mapColumns[column] = self._get_valid_kbc_storage_name(column)
+                map_columns[column] = self._get_valid_kbc_storage_name(column)
             elif self._is_formatted_value_column(column):
-                mapColumns[column] = self._get_shortened_formatted_value_column_name(column)
+                map_columns[column] = self._get_shortened_formatted_value_column_name(column)
             elif '@odata' in column:
                 continue
             else:
-                mapColumns[column] = column
+                map_columns[column] = column
 
-        self.varMapColumns = mapColumns
+        self.var_map_columns = map_columns
 
     def _get_valid_kbc_storage_name(self, column_name):
         if not self._is_formatted_value_column(column_name):
@@ -59,24 +59,24 @@ class DynamicsWriter:
         name_with_removed_formatted_value = column_name.replace(FORMATTED_VALUE_LABEL, "")
         return f"{name_with_removed_formatted_value}_formattedValue"
 
-    def createWriter(self):
+    def create_writer(self):
 
-        self.writer = csv.DictWriter(open(self.parFullTablePath, 'w'),
-                                     fieldnames=list(self.varMapColumns.keys()),
+        self.writer = csv.DictWriter(open(self.par_full_table_path, 'w'),
+                                     fieldnames=list(self.var_map_columns.keys()),
                                      restval='', extrasaction='ignore',
                                      quotechar='"', quoting=csv.QUOTE_ALL)
 
-    def createManifest(self):
+    def create_manifest(self):
 
         template = {
-            'primary_key': self.parPrimaryKeys,
-            'incremental': self.parIncremental,
-            'columns': list(self.varMapColumns.values())
+            'primary_key': self.par_primary_keys,
+            'incremental': self.par_incremental,
+            'columns': list(self.var_map_columns.values())
         }
 
-        with open(self.parFullTablePath + '.manifest', 'w') as manFile:
+        with open(self.par_full_table_path + '.manifest', 'w') as manFile:
             json.dump(template, manFile)
 
-    def writerows(self, dataToWrite):
+    def writerows(self, data_to_write):
 
-        self.writer.writerows(dataToWrite)
+        self.writer.writerows(data_to_write)
